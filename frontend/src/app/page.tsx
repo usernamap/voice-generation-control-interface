@@ -1195,11 +1195,10 @@ export default function Home() {
             key={tab}
             type="button"
             onClick={() => setActiveTab(tab)}
-            className={`rounded-xl px-3 py-2 text-sm transition ${
-              activeTab === tab
-                ? "bg-[var(--accent)] text-white"
-                : "border border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
-            }`}
+            className={`rounded-xl px-3 py-2 text-sm transition ${activeTab === tab
+              ? "bg-[var(--accent)] text-white"
+              : "border border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              }`}
             aria-pressed={activeTab === tab}
           >
             {label}
@@ -1244,11 +1243,10 @@ export default function Home() {
                   key={feature.id}
                   type="button"
                   onClick={() => setSelectedFeatureId(feature.id)}
-                  className={`rounded-full px-3 py-1.5 text-sm transition ${
-                    selectedFeatureId === feature.id
-                      ? "bg-[var(--accent)] text-white"
-                      : "border border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
-                  }`}
+                  className={`rounded-full px-3 py-1.5 text-sm transition ${selectedFeatureId === feature.id
+                    ? "bg-[var(--accent)] text-white"
+                    : "border border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                    }`}
                 >
                   {feature.title}
                 </button>
@@ -1313,9 +1311,9 @@ export default function Home() {
                               ? "Import auto en cours..."
                               : audioFiles[field.name]
                                 ? `Upload local (fallback): ${audioFiles[field.name]?.name}`
-                              : audioMediaRefs[field.name]
-                                ? `Media: ${audioMediaRefs[field.name]}`
-                                : "Aucune source"}
+                                : audioMediaRefs[field.name]
+                                  ? `Media: ${audioMediaRefs[field.name]}`
+                                  : "Aucune source"}
                           </p>
                         </div>
                       ))}
@@ -1406,7 +1404,6 @@ export default function Home() {
               <div className="mt-2 max-h-28 overflow-auto rounded-xl border border-[var(--border)] bg-white p-2 text-xs text-[var(--muted)]">
                 {speakerIds.length === 0 ? "No speakers listed." : speakerIds.join(", ")}
               </div>
-
               <form className="mt-3 space-y-2" onSubmit={(event) => void handleAddSpeaker(event)}>
                 <input
                   className="w-full rounded-xl border border-[var(--border)] bg-white px-3 py-2 text-xs outline-none transition focus-visible:border-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
