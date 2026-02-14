@@ -18,3 +18,9 @@ Transformer `CosyVoice` en dossier versionné normal (pas gitlink/blob) et centr
 1. [x] Corriger `install-backend` pour éviter la dépendance à `pip` global.
 2. [x] Valider `make install-backend`.
 3. [x] Valider `make install` complet (backend + frontend).
+
+## Hotfix 2026-02-14 (port conflit dev)
+1. [x] Diagnostiquer le crash backend au lancement `make dev-backend`.
+2. [x] Ajouter un précheck de port clair côté `Makefile` et `scripts/dev-all.sh`.
+3. [x] Ajouter le support d'override `API_HOST`/`API_PORT` sans changer le défaut `127.0.0.1:8000`.
+4. [x] Valider le chemin d'erreur (port occupé) et le chemin de succès (`API_PORT=8001`).

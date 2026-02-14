@@ -69,3 +69,8 @@
 - Hotfix installation:
   - `install-backend` utilise desormais `CosyVoice/.venv/bin/python -m pip` (plus de dependance a `pip` global).
   - `make install` est confirme fonctionnel sur la machine locale.
+- Hotfix lancement backend:
+  - le crash observe n'etait pas applicatif: `127.0.0.1:8000` etait deja occupe.
+  - `make dev-backend` et `make dev` effectuent maintenant un precheck de port et affichent un diagnostic actionnable.
+  - override disponible: `API_HOST`, `API_PORT` (ex: `make dev-backend API_PORT=8001`).
+  - `CosyVoice/webui.py` conserve un port par defaut distinct (`3008`) pour eviter un chevauchement avec l'API (`8000`).

@@ -100,3 +100,24 @@
 - Validations:
   - `make install-backend` OK.
   - `make install` (backend + frontend) OK.
+
+## 2026-02-14 (diagnostic crash backend dev)
+- Reproduction: `make dev-backend` se termine par `address already in use`.
+- Diagnostic chirurgical:
+  - `lsof -nP -iTCP:8000 -sTCP:LISTEN` retourne un process Python actif (PID 7913).
+  - conclusion: conflit de port local, pas de crash logique de l'application.
+- Correctif non-régressif:
+  - `Makefile`:
+    - ajout `API_HOST`/`API_PORT` (defaults `127.0.0.1` / `8000`).
+    - précheck de port avant démarrage backend avec message explicite.
+  - `scripts/dev-all.sh`:
+    - précheck de port backend.
+    - propagation `COSYVOICE_API_HOST`/`COSYVOICE_API_PORT`.
+  - `README.md`:
+    - doc d'override (`make dev-backend API_PORT=8001`, `make dev API_PORT=8001`).
+- Validations:
+  - `make dev-backend` (port 8000 occupé) => erreur claire + process affiché + action suggérée.
+  - `make dev-backend API_PORT=8001` => démarrage backend OK (`Uvicorn running on http://127.0.0.1:8001`).
+  - `make dev` (port 8000 occupé) => arrêt immédiat avec diagnostic explicite avant lancement des services.
+- Ajustement inclus:
+  - `CosyVoice/webui.py` garde un port par défaut séparé (`3008`) pour limiter les collisions locales.

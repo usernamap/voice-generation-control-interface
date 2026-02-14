@@ -75,3 +75,11 @@
 ## ADR-019: Installer le backend via le Python du venv (pas `pip` shell)
 - Décision: exécuter les installations backend avec `CosyVoice/.venv/bin/python -m pip`.
 - Raison: éviter les erreurs d'environnement (`pip` introuvable en shell non interactif) et rendre `make install` déterministe.
+
+## ADR-020: Détection proactive des conflits de port en mode dev
+- Décision: ajouter un précheck de port dans `make dev-backend` et `scripts/dev-all.sh`, avec paramètres `API_HOST`/`API_PORT` overridables.
+- Raison: transformer un crash uvicorn tardif (`address already in use`) en erreur actionnable immédiate, sans modifier le comportement par défaut.
+
+## ADR-021: Conserver un port distinct pour `webui.py`
+- Décision: conserver un port par défaut dédié pour la web UI (`3008`) différent de l'API FastAPI (`8000`).
+- Raison: réduire les collisions de ports en usage local et rendre les lancements parallèles plus prévisibles.
