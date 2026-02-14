@@ -18,25 +18,26 @@ Control surface moderne pour l'API Python CosyVoice.
 ## Run
 
 ```bash
-cd /Users/usernamap/Documents/dev_pers/t/frontend
-npm install
-cp .env.local.example .env.local
-npm run dev
+cd /Users/usernamap/Documents/dev_pers/voice-generation-control-interface
+make dev-frontend
 ```
 
-Open: `http://localhost:3000`
-
-## Backend URL
-
-Par défaut le frontend cible:
-
-`http://127.0.0.1:8000`
-
-Vous pouvez changer via `.env.local`:
+Ou en mode direct:
 
 ```bash
-NEXT_PUBLIC_API_BASE=http://127.0.0.1:8000
+cd /Users/usernamap/Documents/dev_pers/voice-generation-control-interface/frontend
+npm install
+source /Users/usernamap/Documents/dev_pers/voice-generation-control-interface/scripts/load-ssot-env.sh
+NEXT_PUBLIC_API_BASE="$NEXT_PUBLIC_API_BASE" npm run dev -- --hostname "$FRONTEND_HOST" --port "$FRONTEND_PORT"
 ```
+
+Open: `http://127.0.0.1:3000`
+
+## SSOT config
+
+Le frontend lit obligatoirement `NEXT_PUBLIC_API_BASE` depuis:
+
+`/Users/usernamap/Documents/dev_pers/voice-generation-control-interface/config/ssot.env`
 
 ## Quality checks
 

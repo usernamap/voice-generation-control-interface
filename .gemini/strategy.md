@@ -1,7 +1,7 @@
 # Strategy
 
 ## Objective
-Transformer `CosyVoice` en dossier versionné normal (pas gitlink/blob) et centraliser l'exécution backend/frontend depuis la racine du monorepo.
+Centraliser strictement ports, URLs, paths et paramètres runtime dans un SSOT unique sans fallback implicite.
 
 ## Plan
 1. [x] Retirer le gitlink `CosyVoice` de l'index parent et l'ajouter comme dossier standard suivi fichier par fichier.
@@ -24,3 +24,10 @@ Transformer `CosyVoice` en dossier versionné normal (pas gitlink/blob) et centr
 2. [x] Ajouter un précheck de port clair côté `Makefile` et `scripts/dev-all.sh`.
 3. [x] Ajouter le support d'override `API_HOST`/`API_PORT` sans changer le défaut `127.0.0.1:8000`.
 4. [x] Valider le chemin d'erreur (port occupé) et le chemin de succès (`API_PORT=8001`).
+
+## Refactor 2026-02-14 (SSOT config unifiée)
+1. [x] Créer un fichier unique `config/ssot.env` centralisant ports, URLs, paths et paramètres runtime.
+2. [x] Brancher `Makefile` et `scripts/dev-all.sh` sur cette config sans fallback implicite.
+3. [x] Rendre backend (`tools/run_api_server.py`, `api_server/main.py`) strictement piloté par la config SSOT.
+4. [x] Rendre frontend (`NEXT_PUBLIC_API_BASE`) strictement piloté par la config SSOT.
+5. [x] Mettre à jour la documentation et la mémoire `.gemini`, puis valider (`lint`, `build`, `make` ciblés).

@@ -72,5 +72,20 @@
 - Hotfix lancement backend:
   - le crash observe n'etait pas applicatif: `127.0.0.1:8000` etait deja occupe.
   - `make dev-backend` et `make dev` effectuent maintenant un precheck de port et affichent un diagnostic actionnable.
-  - override disponible: `API_HOST`, `API_PORT` (ex: `make dev-backend API_PORT=8001`).
+  - changement de port via la SSOT: edition de `config/ssot.env` (`COSYVOICE_API_HOST`, `COSYVOICE_API_PORT`).
   - `CosyVoice/webui.py` conserve un port par defaut distinct (`3008`) pour eviter un chevauchement avec l'API (`8000`).
+
+## SSOT configuration unifiée (2026-02-14)
+
+- Fichier unique de configuration ajouté: `config/ssot.env`.
+- Chargement/validation shell centralisés via `scripts/load-ssot-env.sh`.
+- Orchestration racine strictement branchée sur SSOT:
+  - `Makefile` lit `config/ssot.env` et valide toutes les clés requises.
+  - `scripts/dev-all.sh` charge la même source et ne contient plus de fallback host/port.
+- Backend strictement piloté par SSOT:
+  - `CosyVoice/api_server/ssot.py` charge `config/ssot.env` et expose des helpers `require_env`.
+  - `CosyVoice/tools/run_api_server.py` et `CosyVoice/api_server/main.py` n'utilisent plus de valeurs par défaut implicites.
+- Frontend strictement piloté par SSOT:
+  - `frontend/src/app/page.tsx` exige `NEXT_PUBLIC_API_BASE` (plus de fallback hardcodé).
+- Documentation mise à jour:
+  - `README.md`, `frontend/README.md`, `CosyVoice/README_API.md`.

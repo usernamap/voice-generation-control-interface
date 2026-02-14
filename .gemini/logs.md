@@ -121,3 +121,28 @@
   - `make dev` (port 8000 occupé) => arrêt immédiat avec diagnostic explicite avant lancement des services.
 - Ajustement inclus:
   - `CosyVoice/webui.py` garde un port par défaut séparé (`3008`) pour limiter les collisions locales.
+
+## 2026-02-14 (SSOT ports/URLs/paths sans fallback)
+- Création source unique:
+  - `config/ssot.env` centralise ports, URLs, paths, limites runtime.
+  - `scripts/load-ssot-env.sh` valide les clés requises et exporte l'environnement.
+- Refactor orchestration:
+  - `Makefile` inclut `config/ssot.env` et supprime les defaults implicites.
+  - `scripts/dev-all.sh` charge SSOT et lance backend/frontend avec ces valeurs.
+- Refactor backend:
+  - ajout `CosyVoice/api_server/ssot.py` (loader + validation stricte).
+  - `CosyVoice/tools/run_api_server.py` migre vers `require_env` / `require_int_env`.
+  - `CosyVoice/api_server/main.py` migre vers SSOT strict pour model dir, output dir, tailles, CORS, tokenizer.
+- Refactor frontend:
+  - `frontend/src/app/page.tsx` supprime fallback `http://127.0.0.1:8000` et exige `NEXT_PUBLIC_API_BASE`.
+- Docs:
+  - `README.md`, `frontend/README.md`, `CosyVoice/README_API.md` alignés SSOT.
+- Validations:
+  - `bash -n scripts/load-ssot-env.sh` OK.
+  - `bash -n scripts/dev-all.sh` OK.
+  - `make help` OK.
+  - `make check-ssot` OK.
+  - `make lint-backend` OK.
+  - `make lint-frontend` OK.
+  - `make build-frontend` OK.
+  - `make dev-backend` (port 8000 occupé) => diagnostic clair + action (éditer `config/ssot.env`).

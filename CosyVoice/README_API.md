@@ -5,9 +5,8 @@ Backend FastAPI centralisant les fonctionnalités CosyVoice avec persistance loc
 ## Démarrage backend
 
 ```bash
-cd /Users/usernamap/Documents/dev_pers/t/CosyVoice
-source .venv/bin/activate
-python tools/run_api_server.py
+cd /Users/usernamap/Documents/dev_pers/voice-generation-control-interface
+make dev-backend
 ```
 
 API docs: `http://127.0.0.1:8000/docs`
@@ -64,17 +63,26 @@ Le backend persiste les états dans `CosyVoice/api_output/_state/`:
 - `suggestions.json`
 - `audit_events.jsonl`
 
-## Variables d'environnement
+## Variables d'environnement (SSOT stricte)
 
-- `COSYVOICE_MODEL_DIR` (default: `pretrained_models/Fun-CosyVoice3-0.5B`)
-- `COSYVOICE_API_OUTPUT_DIR` (default: `api_output`)
-- `COSYVOICE_API_HISTORY_SIZE` (default: `100`)
-- `COSYVOICE_API_AUDIT_SIZE` (default: `300`)
-- `COSYVOICE_API_SUGGESTIONS_PER_FIELD` (default: `20`)
-- `COSYVOICE_API_MAX_UPLOAD_BYTES` (default: `52428800`, soit ~50MB)
-- `COSYVOICE_API_HOST` (default: `127.0.0.1`)
-- `COSYVOICE_API_PORT` (default: `8000`)
-- `COSYVOICE_CORS_ORIGINS` (default: `http://localhost:3000,http://127.0.0.1:3000`)
+Le backend charge obligatoirement la configuration depuis:
+
+`/Users/usernamap/Documents/dev_pers/voice-generation-control-interface/config/ssot.env`
+
+Clés requises:
+
+- `COSYVOICE_MODEL_DIR`
+- `COSYVOICE_API_OUTPUT_DIR`
+- `COSYVOICE_API_HISTORY_SIZE`
+- `COSYVOICE_API_AUDIT_SIZE`
+- `COSYVOICE_API_SUGGESTIONS_PER_FIELD`
+- `COSYVOICE_API_MAX_UPLOAD_BYTES`
+- `COSYVOICE_API_HOST`
+- `COSYVOICE_API_PORT`
+- `COSYVOICE_CORS_ORIGINS`
+- `TOKENIZERS_PARALLELISM`
+
+Il n'y a pas de fallback implicite.
 
 ## Déduplication média (SHA-256)
 
@@ -93,10 +101,8 @@ Si `ffmpeg` n'est pas installé, l'API retourne une erreur explicite.
 ## Frontend Next.js
 
 ```bash
-cd /Users/usernamap/Documents/dev_pers/t/frontend
-cp .env.local.example .env.local
-npm install
-npm run dev
+cd /Users/usernamap/Documents/dev_pers/voice-generation-control-interface
+make dev-frontend
 ```
 
-UI: `http://localhost:3000`
+UI: `http://127.0.0.1:3000`

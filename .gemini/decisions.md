@@ -83,3 +83,11 @@
 ## ADR-021: Conserver un port distinct pour `webui.py`
 - Décision: conserver un port par défaut dédié pour la web UI (`3008`) différent de l'API FastAPI (`8000`).
 - Raison: réduire les collisions de ports en usage local et rendre les lancements parallèles plus prévisibles.
+
+## ADR-022: Introduire un SSOT unique `config/ssot.env`
+- Décision: centraliser ports, URLs, paths et paramètres runtime dans `config/ssot.env`.
+- Raison: supprimer la duplication de configuration entre Makefile, scripts shell, backend Python et frontend Next.js.
+
+## ADR-023: Politique stricte sans fallback implicite
+- Décision: remplacer les `os.getenv(..., default)` et valeurs hardcodées par des variables requises validées au démarrage.
+- Raison: garantir un comportement déterministe et aligné SSOT, avec échec explicite en cas de config incomplète.

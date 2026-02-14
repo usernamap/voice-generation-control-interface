@@ -35,7 +35,11 @@ type StoredState = {
   mediaByFeature: Record<string, Record<string, string>>;
 };
 
-const DEFAULT_API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://127.0.0.1:8000";
+const configuredApiBase = process.env.NEXT_PUBLIC_API_BASE;
+if (!configuredApiBase) {
+  throw new Error("Missing NEXT_PUBLIC_API_BASE. Load config/ssot.env before starting frontend.");
+}
+const DEFAULT_API_BASE = configuredApiBase;
 const STORAGE_KEY = "cosyvoice.control.v2";
 const MAX_AUDIT_UI_ITEMS = 300;
 const FALLBACK_CONVERSION_FORMATS = ["wav", "mp3", "flac", "ogg", "m4a", "mp4"];
@@ -1108,7 +1112,7 @@ export default function Home() {
               className="w-full rounded-xl border border-[var(--border)] bg-white px-3 py-2 text-sm outline-none transition focus-visible:border-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
               value={apiBase}
               onChange={(event) => setApiBase(event.target.value)}
-              placeholder="http://127.0.0.1:8000"
+              placeholder={DEFAULT_API_BASE}
               aria-label="URL de l API backend"
             />
             <button

@@ -22,6 +22,7 @@ import random
 import librosa
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append('{}/third_party/Matcha-TTS'.format(ROOT_DIR))
+from api_server.ssot import load_ssot_env, require_env, require_int_env
 from cosyvoice.cli.cosyvoice import AutoModel
 from cosyvoice.utils.file_utils import logging
 from cosyvoice.utils.common import set_all_random_seed
@@ -151,17 +152,25 @@ def main():
                               outputs=[audio_output])
         mode_checkbox_group.change(fn=change_instruction, inputs=[mode_checkbox_group], outputs=[instruction_text])
     demo.queue(max_size=4, default_concurrency_limit=2)
-    demo.launch(server_name='0.0.0.0', server_port=args.port)
+    demo.launch(server_name=args.host, server_port=args.port)
 
 
 if __name__ == '__main__':
+    load_ssot_env()
+    default_host = require_env('COSYVOICE_WEBUI_HOST')
+    default_port = require_int_env('COSYVOICE_WEBUI_PORT')
+    default_model_dir = require_env('COSYVOICE_MODEL_DIR')
+
     parser = argparse.ArgumentParser()
+    parser.add_argument('--host',
+                        type=str,
+                        default=default_host)
     parser.add_argument('--port',
                         type=int,
-                        default=3008)
+                        default=default_port)
     parser.add_argument('--model_dir',
                         type=str,
-                        default='pretrained_models/CosyVoice2-0.5B',
+                        default=default_model_dir,
                         help='local path or modelscope repo id')
     args = parser.parse_args()
     cosyvoice = AutoModel(model_dir=args.model_dir)

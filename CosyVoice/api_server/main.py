@@ -25,8 +25,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from starlette.datastructures import UploadFile as StarletteUploadFile
 
-os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
@@ -34,21 +32,31 @@ MATCHA_PATH = REPO_ROOT / "third_party" / "Matcha-TTS"
 if str(MATCHA_PATH) not in sys.path:
     sys.path.append(str(MATCHA_PATH))
 
+from api_server.ssot import load_ssot_env, require_env, require_int_env
 from cosyvoice.cli.cosyvoice import AutoModel
 
-MODEL_DIR_DEFAULT = os.getenv(
-    "COSYVOICE_MODEL_DIR", str(REPO_ROOT / "pretrained_models" / "Fun-CosyVoice3-0.5B")
-)
-OUTPUT_DIR = Path(os.getenv("COSYVOICE_API_OUTPUT_DIR", str(REPO_ROOT / "api_output")))
+load_ssot_env()
+os.environ["TOKENIZERS_PARALLELISM"] = require_env("TOKENIZERS_PARALLELISM")
+
+
+def _resolve_repo_path(raw_path: str) -> Path:
+    path = Path(raw_path)
+    if path.is_absolute():
+        return path
+    return (REPO_ROOT / path).resolve()
+
+
+MODEL_DIR_DEFAULT = str(_resolve_repo_path(require_env("COSYVOICE_MODEL_DIR")))
+OUTPUT_DIR = _resolve_repo_path(require_env("COSYVOICE_API_OUTPUT_DIR"))
 STATE_DIR = OUTPUT_DIR / "_state"
 UPLOAD_DIR = OUTPUT_DIR / "_uploads"
 MEDIA_DIR = OUTPUT_DIR / "_media"
 CONVERT_DIR = OUTPUT_DIR / "_converted"
 
-MAX_HISTORY_ITEMS = int(os.getenv("COSYVOICE_API_HISTORY_SIZE", "100"))
-MAX_AUDIT_EVENTS = int(os.getenv("COSYVOICE_API_AUDIT_SIZE", "300"))
-MAX_SUGGESTIONS_PER_FIELD = int(os.getenv("COSYVOICE_API_SUGGESTIONS_PER_FIELD", "20"))
-MAX_UPLOAD_BYTES = int(os.getenv("COSYVOICE_API_MAX_UPLOAD_BYTES", str(50 * 1024 * 1024)))
+MAX_HISTORY_ITEMS = require_int_env("COSYVOICE_API_HISTORY_SIZE")
+MAX_AUDIT_EVENTS = require_int_env("COSYVOICE_API_AUDIT_SIZE")
+MAX_SUGGESTIONS_PER_FIELD = require_int_env("COSYVOICE_API_SUGGESTIONS_PER_FIELD")
+MAX_UPLOAD_BYTES = require_int_env("COSYVOICE_API_MAX_UPLOAD_BYTES")
 
 HISTORY_STATE_PATH = STATE_DIR / "history.json"
 MEDIA_STATE_PATH = STATE_DIR / "media.json"
@@ -334,12 +342,11 @@ app = FastAPI(
 
 cors_origins = [
     origin.strip()
-    for origin in os.getenv(
-        "COSYVOICE_CORS_ORIGINS",
-        "http://localhost:3000,http://127.0.0.1:3000",
-    ).split(",")
+    for origin in require_env("COSYVOICE_CORS_ORIGINS").split(",")
     if origin.strip()
 ]
+if not cors_origins:
+    raise RuntimeError("COSYVOICE_CORS_ORIGINS must contain at least one origin.")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
