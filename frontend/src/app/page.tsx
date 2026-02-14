@@ -216,17 +216,30 @@ function mediaKindFromField(fieldName: string): MediaKind {
 }
 
 export default function Home() {
-  const persisted = useMemo(loadStoredState, []);
+  const defaults = defaultStoredState();
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const [apiBase, setApiBase] = useState(persisted.apiBase || DEFAULT_API_BASE);
+  const [apiBase, setApiBase] = useState(defaults.apiBase);
   const [capabilities, setCapabilities] = useState<CapabilitiesResponse | null>(null);
-  const [selectedFeatureId, setSelectedFeatureId] = useState<string>(persisted.selectedFeatureId);
-  const [activeTab, setActiveTab] = useState<TabId>(persisted.activeTab);
+  const [selectedFeatureId, setSelectedFeatureId] = useState<string>(defaults.selectedFeatureId);
+  const [activeTab, setActiveTab] = useState<TabId>(defaults.activeTab);
 
   const [draftsByFeature, setDraftsByFeature] = useState<Record<string, Record<string, FormValue>>>(
-    persisted.draftsByFeature
+    defaults.draftsByFeature
   );
-  const [mediaByFeature, setMediaByFeature] = useState<Record<string, Record<string, string>>>(persisted.mediaByFeature);
+  const [mediaByFeature, setMediaByFeature] = useState<Record<string, Record<string, string>>>(
+    defaults.mediaByFeature
+  );
+
+  useEffect(() => {
+    const persisted = loadStoredState();
+    setApiBase(persisted.apiBase);
+    setSelectedFeatureId(persisted.selectedFeatureId);
+    setActiveTab(persisted.activeTab);
+    setDraftsByFeature(persisted.draftsByFeature);
+    setMediaByFeature(persisted.mediaByFeature);
+    setIsLoaded(true);
+  }, []);
 
   const draftsRef = useRef(draftsByFeature);
   const mediaRef = useRef(mediaByFeature);
@@ -533,6 +546,9 @@ export default function Home() {
   }, [selectedFeature]);
 
   useEffect(() => {
+    if (!isLoaded) {
+      return;
+    }
     const payload: StoredState = {
       apiBase,
       selectedFeatureId,
@@ -543,7 +559,7 @@ export default function Home() {
     if (typeof window !== "undefined") {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     }
-  }, [activeTab, apiBase, draftsByFeature, mediaByFeature, selectedFeatureId]);
+  }, [activeTab, apiBase, draftsByFeature, mediaByFeature, selectedFeatureId, isLoaded]);
 
   useEffect(() => {
     let source: EventSource | null = null;
