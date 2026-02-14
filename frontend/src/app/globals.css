@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --background: #070c13;
+  --foreground: #e8eef7;
+  --surface: #0f1724;
+  --surface-strong: #121d2d;
+  --surface-elev: #162336;
+  --accent: #2fd2ff;
+  --accent-soft: #1a3646;
+  --accent-strong: #00aee8;
+  --warning: #f2a818;
+  --danger: #ff5f6d;
+  --muted: #93a7bf;
+  --border: #23364f;
+  --ring: rgba(47, 210, 255, 0.38);
+  --shadow: 0 24px 56px rgba(3, 8, 20, 0.55);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-ibm-plex-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-space-grotesk), sans-serif;
+  background-image:
+    radial-gradient(circle at 12% 4%, rgba(47, 210, 255, 0.2), transparent 28%),
+    radial-gradient(circle at 89% 13%, rgba(255, 95, 109, 0.14), transparent 24%),
+    radial-gradient(circle at 78% 82%, rgba(50, 180, 255, 0.16), transparent 28%),
+    linear-gradient(180deg, #070c13 0%, #0b1220 45%, #0c1725 100%);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea,
+a,
+summary,
+[role="button"] {
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+
+.bg-white {
+  background-color: var(--surface-elev) !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.glass {
+  background: color-mix(in oklab, var(--surface) 88%, #1b2a40 12%);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.fade-up {
+  animation: fade-up 420ms ease-out both;
+}
+
+.text-mono {
+  font-family: var(--font-ibm-plex-mono), monospace;
+}
+
+audio {
+  accent-color: var(--accent-strong);
+}
+
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(16, 28, 43, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(91, 124, 164, 0.6);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(123, 164, 210, 0.75);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
