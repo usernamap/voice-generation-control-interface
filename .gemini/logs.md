@@ -67,3 +67,26 @@
 - Test API déduplication:
   - import #1 => `created=true`, `deduplicated=false`
   - import #2 même contenu => `created=false`, `deduplicated=true`, même `media_id`
+
+## 2026-02-14 (gitlink CosyVoice + orchestration racine)
+- Diagnostic gitlink confirmé:
+  - `CosyVoice` indexé en mode `160000` dans le dépôt parent.
+  - absence de mapping `.gitmodules` côté parent.
+  - présence de dépôts imbriqués dans `CosyVoice/.git` et `CosyVoice/third_party/Matcha-TTS/.git`.
+- Conversion vers dossier normal:
+  - suppression de l'entrée index via `git update-index --force-remove CosyVoice`.
+  - retrait des métadonnées Git imbriquées (moved hors repo) puis `git add -A CosyVoice`.
+  - vérification: plus aucun `160000` pour `CosyVoice`.
+- Nettoyage index:
+  - exclusion de `CosyVoice/.venv/` via `CosyVoice/.gitignore`.
+  - validation qu'aucun fichier `.venv` n'est staged.
+- Centralisation monorepo:
+  - ajout `Makefile` racine (`install`, `dev`, `dev-backend`, `dev-frontend`, `lint`, `build`).
+  - ajout `scripts/dev-all.sh` (backend + frontend en parallèle, cleanup sur arrêt).
+  - ajout `README.md` racine (guide des commandes centralisées).
+- Validations de la couche racine:
+  - `bash -n scripts/dev-all.sh` OK.
+  - `make help` OK.
+  - `make lint-backend` OK.
+  - `make lint-frontend` OK.
+  - `make build` OK.

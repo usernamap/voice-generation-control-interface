@@ -63,3 +63,11 @@
 ## ADR-016: Compatibilité weight norm multi-versions torch
 - Décision: migrer vers `torch.nn.utils.parametrizations.weight_norm` avec fallback legacy + remove robuste.
 - Raison: supprimer warning de dépréciation sans casser la compatibilité des modèles tiers.
+
+## ADR-017: Remplacer le gitlink `CosyVoice` par un dossier versionne standard
+- Décision: retirer l'entrée gitlink (`160000`) du dépôt parent et versionner le contenu de `CosyVoice` directement.
+- Raison: éviter l'affichage "blob/pointeur" GitHub et permettre un suivi normal des fichiers (add/commit/push) depuis le monorepo.
+
+## ADR-018: Standardiser l'execution monorepo via `Makefile` racine
+- Décision: introduire une interface de commandes unique (`make install`, `make dev`, `make lint`, `make build`) appuyée par `scripts/dev-all.sh`.
+- Raison: simplifier l'exploitation quotidienne backend + frontend depuis la racine avec une UX claire et reproductible.

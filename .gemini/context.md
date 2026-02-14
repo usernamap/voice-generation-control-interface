@@ -56,3 +56,13 @@
 - `npm run lint` (frontend) OK.
 - `npm run build` (frontend) OK.
 - `./.venv/bin/python tools/run_api_server.py` démarre sans warnings SDPA/weight_norm/pkg_resources visibles.
+
+## Mise a jour monorepo (2026-02-14)
+
+- `CosyVoice` est maintenant versionne comme dossier standard dans le depot parent (fin du gitlink `160000`).
+- Les depots Git imbriques (`CosyVoice/.git`, `CosyVoice/third_party/Matcha-TTS/.git`) ont ete retires du workspace pour eviter le mode sous-module implicite.
+- Le venv local backend reste non versionne via `.venv/` ajoute dans `CosyVoice/.gitignore`.
+- Une orchestration racine est disponible:
+  - `Makefile` a la racine (`install`, `dev`, `dev-backend`, `dev-frontend`, `lint`, `build`).
+  - script `scripts/dev-all.sh` pour demarrage backend + frontend en parallele avec arret propre.
+  - `README.md` racine documentant les commandes centralisees.
