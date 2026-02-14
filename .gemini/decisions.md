@@ -71,3 +71,7 @@
 ## ADR-018: Standardiser l'execution monorepo via `Makefile` racine
 - Décision: introduire une interface de commandes unique (`make install`, `make dev`, `make lint`, `make build`) appuyée par `scripts/dev-all.sh`.
 - Raison: simplifier l'exploitation quotidienne backend + frontend depuis la racine avec une UX claire et reproductible.
+
+## ADR-019: Installer le backend via le Python du venv (pas `pip` shell)
+- Décision: exécuter les installations backend avec `CosyVoice/.venv/bin/python -m pip`.
+- Raison: éviter les erreurs d'environnement (`pip` introuvable en shell non interactif) et rendre `make install` déterministe.

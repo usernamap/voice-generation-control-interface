@@ -90,3 +90,13 @@
   - `make lint-backend` OK.
   - `make lint-frontend` OK.
   - `make build` OK.
+
+## 2026-02-14 (hotfix make install)
+- Incident reporté: `make install` échouait avec `/bin/bash: pip: command not found`.
+- Correctif appliqué dans `Makefile`:
+  - remplacement du flux `source .venv/bin/activate && pip ...` par
+    `$(BACKEND_DIR)/.venv/bin/python -m pip ...`.
+  - ajout `python -m ensurepip --upgrade` en fallback de robustesse.
+- Validations:
+  - `make install-backend` OK.
+  - `make install` (backend + frontend) OK.

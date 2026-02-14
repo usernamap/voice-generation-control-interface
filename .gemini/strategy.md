@@ -13,3 +13,8 @@ Transformer `CosyVoice` en dossier versionné normal (pas gitlink/blob) et centr
 - Backend principal piloté depuis `CosyVoice/tools/run_api_server.py`.
 - Frontend principal piloté depuis `frontend/package.json`.
 - La centralisation se fera sans casser les commandes existantes dans chaque sous-projet.
+
+## Hotfix 2026-02-14
+1. [x] Corriger `install-backend` pour éviter la dépendance à `pip` global.
+2. [x] Valider `make install-backend`.
+3. [x] Valider `make install` complet (backend + frontend).

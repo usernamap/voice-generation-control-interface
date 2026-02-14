@@ -66,3 +66,6 @@
   - `Makefile` a la racine (`install`, `dev`, `dev-backend`, `dev-frontend`, `lint`, `build`).
   - script `scripts/dev-all.sh` pour demarrage backend + frontend en parallele avec arret propre.
   - `README.md` racine documentant les commandes centralisees.
+- Hotfix installation:
+  - `install-backend` utilise desormais `CosyVoice/.venv/bin/python -m pip` (plus de dependance a `pip` global).
+  - `make install` est confirme fonctionnel sur la machine locale.

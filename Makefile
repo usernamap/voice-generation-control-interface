@@ -4,6 +4,7 @@ SHELL := /bin/bash
 ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 BACKEND_DIR := $(ROOT_DIR)/CosyVoice
 FRONTEND_DIR := $(ROOT_DIR)/frontend
+BACKEND_PYTHON := $(BACKEND_DIR)/.venv/bin/python
 
 .PHONY: help install install-backend install-frontend dev dev-backend dev-frontend lint lint-backend lint-frontend build build-frontend
 
@@ -23,7 +24,9 @@ install: install-backend install-frontend
 install-backend:
 	@cd "$(BACKEND_DIR)" && \
 	if [[ ! -d ".venv" ]]; then python3 -m venv .venv; fi && \
-	. .venv/bin/activate && pip install -r requirements.macos.inference.txt
+	"$(BACKEND_PYTHON)" -m ensurepip --upgrade >/dev/null 2>&1 || true && \
+	"$(BACKEND_PYTHON)" -m pip install --upgrade pip && \
+	"$(BACKEND_PYTHON)" -m pip install -r requirements.macos.inference.txt
 
 install-frontend:
 	@cd "$(FRONTEND_DIR)" && npm install
